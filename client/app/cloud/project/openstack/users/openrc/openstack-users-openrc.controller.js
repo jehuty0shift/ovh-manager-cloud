@@ -58,7 +58,8 @@ angular.module("managerApp")
                 OvhApiCloud.Project().User().Aapi().services.openrc.url,
                 "?",
                 $httpParamSerializer({
-                    region: self.data.region
+                    region: self.data.region,
+                    download: 1
                 })
             ].join("");
 
