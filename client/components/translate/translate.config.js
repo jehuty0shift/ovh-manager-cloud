@@ -53,7 +53,7 @@ angular.module("managerApp")
     };
 })
 
-.provider("TranslateDecoratorService", function () {
+.provider("TranslateDecoratorService", function ($transitionsProvider) {
     "use strict";
 
     /**
@@ -73,62 +73,65 @@ angular.module("managerApp")
      *        ]
      *    });
      */
-    this.add = function ($stateProvider) {
+    this.add = function () {
 
-        $stateProvider.decorator("translations", function (state) {
-            var routeOption = state.self;
+        $transitionsProvider.onBefore({}, function (transition) {
 
-            if (routeOption.translations) {
+            transition.addResolvable({
+                token: "translations",
+                deps: ["$translate", "$translatePartialLoader"],
+                resolveFn: ($translate, $translatePartialLoader) => {
+                    const state = transition.to();
 
-                var templateUrlTab = [];
-                var translationsTab = routeOption.translations;
+                    if (state.translations) {
 
-                if (routeOption.templateUrl) {
-                    templateUrlTab.push(routeOption.templateUrl);
-                }
+                        var templateUrlTab = [];
+                        var translationsTab = state.translations;
 
-                if (routeOption.views) {
-                    angular.forEach(routeOption.views, function (value) {
-                        if (value.templateUrl) {
-                            templateUrlTab.push(value.templateUrl);
+                        if (state.templateUrl) {
+                            templateUrlTab.push(state.templateUrl);
                         }
-                        if (value.translations) {
-                            translationsTab = _.union(translationsTab, value.translations);
+
+                        if (state.views) {
+                            angular.forEach(state.views, function (value) {
+                                if (value.templateUrl) {
+                                    templateUrlTab.push(value.templateUrl);
+                                }
+                                if (value.translations) {
+                                    translationsTab = _.union(translationsTab, value.translations);
+                                }
+                            });
                         }
-                    });
-                }
 
-                translationsTab.push("app/common");
+                        translationsTab.push("app/common");
 
-                angular.forEach(templateUrlTab, function (templateUrl) {
-                    var routeTmp = templateUrl.substring(templateUrl.indexOf("/") + 1, templateUrl.lastIndexOf("/")),
-                        index = routeTmp.lastIndexOf("/");
+                        angular.forEach(templateUrlTab, function (templateUrl) {
+                            var routeTmp = templateUrl.substring(templateUrl.indexOf("/") + 1, templateUrl.lastIndexOf("/")),
+                                index = routeTmp.lastIndexOf("/");
 
-                    while (index > 0) {
-                        translationsTab.push(routeTmp);
-                        routeTmp = routeTmp.substring(0, index);
-                        index = routeTmp.lastIndexOf("/");
+                            while (index > 0) {
+                                translationsTab.push(routeTmp);
+                                routeTmp = routeTmp.substring(0, index);
+                                index = routeTmp.lastIndexOf("/");
+                            }
+
+                            translationsTab.push(routeTmp);
+                        });
+                        // mmmhhh... It seems that we have to refresh after each time a part is added
+
+                        translationsTab = _.uniq(translationsTab);
+
+                        // load translation parts
+                        angular.forEach(translationsTab, function (part) {
+                            $translatePartialLoader.addPart(part);
+                        });
+
+                        return $translate.refresh();
                     }
 
-                    translationsTab.push(routeTmp);
-                });
-                // mmmhhh... It seems that we have to refresh after each time a part is added
-
-                translationsTab = _.uniq(translationsTab);
-
-                state.resolve.translations = ["$translate", "$translatePartialLoader", function ($translate, $translatePartialLoader) {
-                    // load translation parts
-                    angular.forEach(translationsTab, function (part) {
-                        $translatePartialLoader.addPart(part);
-                    });
-
-                    return $translate.refresh();
-                }];
-
-                return translationsTab;
-
-            }
-            return;
+                    return null;
+                }
+            });
         });
     };
     this.$get = function () {

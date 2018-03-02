@@ -2,8 +2,9 @@
 /**
  * Special redirections.
  */
-angular.module("managerApp").run(function ($rootScope, $state) {
-    $rootScope.$on("$stateChangeSuccess", function (e, state) {
+angular.module("managerApp").run(function ($transitions, $state) {
+    $transitions.onSuccess({}, function (transition) {
+        const state = transition.to();
         // Default tab is the 'tokens' view of a project
         if (state.name === "dbaas.dbaasts-project.dbaasts-project-details") {
             $state.go(".dbaasts-project-details-key");

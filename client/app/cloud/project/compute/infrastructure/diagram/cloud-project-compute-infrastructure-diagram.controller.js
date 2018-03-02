@@ -1,6 +1,6 @@
 (() => {
     class CloudProjectComputeInfrastructureDiagramCtrl {
-        constructor ($rootScope, $scope, $document, $filter, $q, $state, $stateParams, $timeout, $translate, $uibModal, $window,
+        constructor ($rootScope, $scope, $document, $filter, $q, $state, $stateParams, $timeout, $translate, $uibModal, $window, $transitions,
                      CloudMessage, CloudProjectComputeInfrastructureOrchestrator, CloudProjectComputeInfrastructureService, CloudProjectComputeVolumesOrchestrator, CloudProjectOrchestrator, CloudUserPref,
                      OvhApiCloud, OvhApiCloudProject, OvhApiCloudProjectFlavor, OvhApiCloudProjectImage, OvhApiCloudProjectNetworkPrivate,
                      OvhApiCloudProjectRegion, OvhApiCloudProjectSnapshot, OvhApiCloudProjectSshKey, OvhApiCloudProjectVolumeSnapshot,
@@ -18,6 +18,7 @@
             this.$translate = $translate;
             this.$uibModal = $uibModal;
             this.$window = $window;
+            this.$transitions = $transitions;
 
             this.CloudMessage = CloudMessage;
             this.CloudProjectComputeInfrastructureOrchestrator = CloudProjectComputeInfrastructureOrchestrator;
@@ -95,7 +96,7 @@
             this.volumes = null;
 
             // Hide highlighted-element on change state
-            this.$scope.$on("$stateChangeStart", () => {
+            this.$transitions.onStart({}, () => {
                 this.$rootScope.$broadcast("highlighed-element.hide");
             });
 

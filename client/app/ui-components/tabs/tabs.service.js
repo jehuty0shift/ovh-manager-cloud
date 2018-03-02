@@ -1,11 +1,11 @@
 class TabsService {
-    constructor ($rootScope, $state) {
+    constructor ($transitions, $state) {
         this.$state = $state;
 
         this.registeredTabs = [];
         this.activeTab = undefined;
 
-        $rootScope.$on("$stateChangeSuccess", () => {
+        $transitions.onSuccess({}, () => {
             this.refreshActiveTab();
         });
     }

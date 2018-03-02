@@ -1,7 +1,7 @@
 angular.module("managerApp")
-  .controller("CdaCtrl", function ($scope, $state, CdaService) {
+  .controller("CdaCtrl", function ($transitions, $state, CdaService) {
       "use strict";
-      $scope.$on("$stateChangeSuccess", function () {
+      $transitions.onSuccess({}, function () {
           if ($state.includes("paas.cda")) {
               CdaService.initDetails($state.params.serviceName);
           }

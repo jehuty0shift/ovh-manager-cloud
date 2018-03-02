@@ -15,7 +15,7 @@ angular.module("managerApp")
 
     // ssoAuthModalPluginFctProvider.setTranslationsPath("bower_components/sso-auth-modal-plugin/dist/modal");
 })
-.run(function ($rootScope, $state, ssoAuthentication) {
+.run(function ($transitions, $state, ssoAuthentication) {
     "use strict";
 
     ssoAuthentication.login();
@@ -23,16 +23,14 @@ angular.module("managerApp")
     // use of onStateChangeStart event to detect if state needs authentification - this is usefull when application is first runned
 
     ssoAuthentication.isLogged().then(function (isLogged) {
-        $rootScope.$on("$stateChangeStart", function (event, toState) {
+        $transitions.onStart({}, function (transition) {
+            const toState = transition.to();
 
             var needToBeAuthenticate = toState.authenticate !== undefined ? toState.authenticate : true;
 
             if (needToBeAuthenticate && !isLogged) {
-                event.preventDefault();
                 ssoAuthentication.goToLoginPage();
             }
-
         });
-
     });
 });

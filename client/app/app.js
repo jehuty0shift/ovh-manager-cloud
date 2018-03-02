@@ -110,12 +110,12 @@ angular.module("managerApp", [
               </div>
             `);
     })
-    .run(($rootScope, $translate, $translatePartialLoader, ouiTableConfiguration,
+    .run(($transitions, $translate, $translatePartialLoader, ouiTableConfiguration,
           ouiDatagridConfiguration, ouiPaginationConfiguration) => {
         "use strict";
         $translatePartialLoader.addPart("components");
 
-        const off = $rootScope.$on("$stateChangeSuccess", () => {
+        const off = $transitions.onSuccess({}, () => {
             ouiTableConfiguration.words = {
                 resultsPerPage: $translate.instant("common_pagination_resultsperpage"),
                 page: $translate.instant("common_pagination_page"),
@@ -142,4 +142,5 @@ angular.module("managerApp", [
 
             off();
         });
-    });
+    })
+    .run(($trace) => $trace.enable("TRANSITION"));

@@ -1,12 +1,17 @@
 class CloudNavigation {
-    constructor ($rootScope, $state, $stateParams, TabsService) {
+    constructor ($transitions, $state, $stateParams, TabsService) {
         this.$state = $state;
         this.$stateParams = $stateParams;
         this.TabsService = TabsService;
 
         this.rootElement = undefined;
 
-        $rootScope.$on("$stateChangeSuccess", (event, toState, toParams, fromState, fromParams) => {
+        /*
+        $transitions.onSuccess({}, (transition) => {
+            const fromState = transition.from();
+            const toState = transition.to();
+            const fromParams = fromState.params();
+            const toParams = toState.params();
             const correspondingState = _.find(this.history, elem => elem.state === toState.name && _.isEqual(elem.stateParams, toParams));
 
             if (correspondingState) {
@@ -17,6 +22,7 @@ class CloudNavigation {
                 this.history.push(element);
             }
         });
+        */
     }
 
     $onInit () {

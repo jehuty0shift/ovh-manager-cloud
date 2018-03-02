@@ -1,5 +1,5 @@
 // used to ensure that we can only edit a single project at a time
-angular.module("managerApp").service("DBaasTsSidebarEditMediator", ["$rootScope", function ($rootScope) {
+angular.module("managerApp").service("DBaasTsSidebarEditMediator", ["$transitions", function ($transitions) {
     "use strict";
 
     var currentEditionScope = null;
@@ -26,7 +26,7 @@ angular.module("managerApp").service("DBaasTsSidebarEditMediator", ["$rootScope"
             // only watch the rootScope once!
             if (!watchScope) {
                 watchScope = true;
-                $rootScope.$on("$stateChangeStart", function () {
+                $transitions.onStart({}, function () {
                     _self.stopEdition();
                 });
             }
