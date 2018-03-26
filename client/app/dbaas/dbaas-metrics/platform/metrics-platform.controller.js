@@ -8,7 +8,7 @@
             this.MetricService = MetricService;
             this.ovhDocUrl = ovhDocUrl;
 
-            this.platforms = [];
+            this.platforms = undefined;
             this.regionName = "";
 
             this.loading = false;
@@ -16,11 +16,14 @@
 
         $onInit () {
             this.loading = true;
-            this.initPlatforms();
+            this.initPlatforms()
+                .finally(() => {
+                    this.loading = false;
+                });
         }
 
         initPlatforms () {
-            this.MetricService.getService(this.serviceName)
+            return this.MetricService.getService(this.serviceName)
                 .then(service => {
                     this.regionName = service.data.region.name;
                     this.platforms = _.map(this.METRICS_ENDPOINTS.protos, proto => (
@@ -30,7 +33,6 @@
                             doc: this.getDoc(proto)
                         }
                     ));
-                    this.loading = false;
                 });
         }
 
