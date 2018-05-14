@@ -1,18 +1,61 @@
 class ProductsService {
-    constructor (OvhApiProducts) {
+    constructor ($q, OvhApiProducts, OvhApiLicense, OvhApiIp) {
+        this.$q = $q;
         this.OvhApiProducts = OvhApiProducts;
+        this.OvhApiLicense = OvhApiLicense;
+        this.OvhApiIp = OvhApiIp;
+
         this.products = {};
+        this.productsDeferred = null;
     }
 
-    getProducts () {
-        return this.OvhApiProducts.Aapi().get({
-            universe: "cloud"
+    getProducts (force) {
+        if (!_.isEmpty(this.products)) {
+            return this.$q.when(this.products);
+        }
+
+        if (!_.isNull(this.productsDeferred) && !force) {
+            return this.productsDeferred.promise;
+        }
+
+        this.productsDeferred = this.$q.defer();
+        this.$q.all({
+            cloudProducts: this.OvhApiProducts.Aapi().get({ universe: "cloud" }).$promise,
+            licenses: this.OvhApiLicense.Aapi().get({ count: 1, offset: 0 }).$promise,
+            ips: this.OvhApiIp.v6().query().$promise
         })
-            .$promise
             .then(products => {
-                this.products = products.results;
-                return products;
+                this.products = this.mergeLicenseIntoProducts(products.licenses, products.cloudProducts);
+                this.products = this.mergeIpsIntoProducts(products.ips, this.products);
+                this.productsDeferred.resolve(this.products);
             });
+
+        return this.productsDeferred.promise;
+    }
+
+    mergeIpsIntoProducts (ips, allProducts) {
+        let allProductsMerged = _.clone(allProducts);
+        allProductsMerged.results.push({
+            name: "IP",
+            services: _.map(ips, ip => ({
+                displayName: ip,
+                serviceName: ip
+            }))
+        });
+        return allProductsMerged;
+    }
+
+    mergeLicenseIntoProducts (licenses, allProducts) {
+        let allProductsMerged = _.clone(allProducts);
+        allProductsMerged.errors.push(...licenses.list.messages);
+        allProductsMerged.results.push({
+            name: "LICENSE",
+            services: _.map(licenses.list.results, license => _.extend(license, {
+                displayName: license.id,
+                serviceName: license.id
+            }))
+        });
+        return allProductsMerged;
     }
 
     getProductsOfType (type) {

@@ -4,6 +4,10 @@
     const allCanadianSubsidiaries = ["ASIA", "AU", "CA", "QC", "SG", "WE", "WS"];
     const featuresAvailability = {
         VPS: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries
@@ -14,6 +18,11 @@
             }
         },
         SERVER: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries,
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries,
@@ -21,6 +30,11 @@
             }
         },
         PROJECT: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries,
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries,
@@ -36,20 +50,33 @@
             }
         },
         DEDICATED_CLOUD: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries,
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries,
                 US: ["US"]
             }
         },
-        ip: {
+        IP: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries,
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries,
                 US: ["US"]
             }
         },
-        iplb: {
+        LOAD_BALANCER: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 // CA: allCanadianSubsidiaries, TODO : to remove when iplb order prodded in CA
@@ -57,13 +84,23 @@
             }
         },
         VRACK: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries,
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries,
                 US: ["US"]
             }
         },
-        licence: {
+        LICENSE: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries,
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries,
@@ -71,35 +108,50 @@
             }
         },
         NASHA: {
+            sidebarMenu: {
+                EU: allEuropeanSubsidiaries,
+                CA: allCanadianSubsidiaries
+            },
             sidebarOrder: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries
             }
         },
         METRICS: {
+            sidebarMenu: {
+                EU: ["FR"],
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: ["FR"],
                 US: ["US"]
             }
         },
         CEPH: {
+            sidebarMenu: {
+                EU: ["FR"],
+                US: ["US"]
+            },
             sidebarOrder: {
                 EU: ["FR"],
                 US: ["US"]
             }
         },
         VEEAM: {
+            sidebarMenu: {
+                EU: ["FR"]
+            },
             sidebarOrder: {
                 EU: ["FR"]
             }
         },
         CLOUD_DESKTOP: {
-            sidebarOrder: {
-                EU: allEuropeanSubsidiaries
-            },
             sidebarMenu: {
                 EU: allEuropeanSubsidiaries,
                 CA: allCanadianSubsidiaries
+            },
+            sidebarOrder: {
+                EU: allEuropeanSubsidiaries
             }
         },
         CONTACTS: {
